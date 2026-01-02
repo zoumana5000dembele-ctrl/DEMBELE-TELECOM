@@ -255,26 +255,14 @@
       <div class="title">Dembélé Telecom</div>
 
       <div id="plans-list">
+        {% for category in categories %}
         <div class="plan-card" onclick="openPay('300F')">
-          <span style="font-weight: 600">⏱️ 08 HEURES</span>
-          <span class="plan-price">300F</span>
+          <span style="font-weight: 600"
+            >⏱️ {{category.activity_time}} {{category.activity_time_unit}}</span
+          >
+          <span class="plan-price">{{category.price}}</span>
         </div>
-        <div class="plan-card" onclick="openPay('500F')">
-          <span style="font-weight: 600">🚀 24 HEURES</span>
-          <span class="plan-price">500F</span>
-        </div>
-        <div class="plan-card" onclick="openPay('1000F')">
-          <span style="font-weight: 600">💎 10 JOURS</span>
-          <span class="plan-price">1000F</span>
-        </div>
-        <div class="plan-card" onclick="openPay('1500F')">
-          <span style="font-weight: 600">🌟 14 JOURS</span>
-          <span class="plan-price">1500F</span>
-        </div>
-        <div class="plan-card" onclick="openPay('3000F')">
-          <span style="font-weight: 600">👑 30 JOURS</span>
-          <span class="plan-price">3000F</span>
-        </div>
+        {% endfor %}
       </div>
 
       <div id="payment-area">

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DEMBELE TELECOM - Contrôle Administrateur</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        background: #0b0f1a;
+        color: #e2e8f0;
+        font-family: "Inter", sans-serif;
+      }
+      .glass {
+        background: rgba(23, 32, 53, 0.8);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      .neon-blue {
+        color: #00f2ff;
+        text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
+      }
+      .neon-border-blue {
+        border: 1px solid #00f2ff;
+        box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
+      }
+      .status-pill {
+        padding: 2px 8px;
+        border-radius: 99px;
+        font-size: 10px;
+        font-weight: bold;
+      }
+      .sms-box {
+        background: rgba(0, 0, 0, 0.3);
+        border-left: 3px solid #f59e0b;
+        padding: 10px;
+        font-family: monospace;
+        font-size: 11px;
+      }
+    </style>
+  </head>
+  <body class="p-4">
+    <header class="mb-6">
+      <h1
+        class="text-xl font-black neon-blue mb-4 uppercase tracking-tighter italic"
+      >
+        DEMBELE TELECOM Dashboard
+      </h1>
+
+      <div class="grid grid-cols-3 md:grid-cols-5 gap-2 mb-6 text-center">
+        <div class="glass p-2 rounded-lg border-b-2 border-blue-500">
+          <p class="text-[10px] text-gray-400">Stock 300F</p>
+          <p class="font-bold">142</p>
+        </div>
+        <div class="glass p-2 rounded-lg border-b-2 border-emerald-500">
+          <p class="text-[10px] text-gray-400">Stock 500F</p>
+          <p class="font-bold">85</p>
+        </div>
+        <div class="glass p-2 rounded-lg border-b-2 border-orange-500">
+          <p class="text-[10px] text-gray-400">Stock 1000F</p>
+          <p class="font-bold">210</p>
+        </div>
+        <div class="glass p-2 rounded-lg border-b-2 border-purple-500">
+          <p class="text-[10px] text-gray-400">Stock 1500F</p>
+          <p class="font-bold">45</p>
+        </div>
+        <div class="glass p-2 rounded-lg border-b-2 border-red-500">
+          <p class="text-[10px] text-gray-400">Stock 3000F</p>
+          <p class="font-bold">12</p>
+        </div>
+      </div>
+    </header>
+
+    <section class="mb-8">
+      <h2 class="text-sm font-bold uppercase mb-3 flex items-center gap-2">
+        <span class="relative flex h-2 w-2">
+          <span
+            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"
+          ></span>
+          <span
+            class="relative inline-flex rounded-full h-2 w-2 bg-orange-500"
+          ></span>
+        </span>
+        Demandes Wi-Fi (Vérification SMS)
+      </h2>
+
+      <div class="glass rounded-xl p-4 neon-border-blue mb-4">
+        <div class="flex justify-between items-center mb-3">
+          <span class="status-pill bg-orange-500/20 text-orange-400 uppercase"
+            >En attente</span
+          >
+          <span class="text-[10px] text-gray-500">Aujourd'hui, 19:12</span>
+        </div>
+
+        <div class="mb-3">
+          <p class="text-xs font-bold text-white mb-1">
+            Plan choisi :
+            <span class="text-purple-400 font-black">1500F (7 Jours)</span>
+          </p>
+          <p class="text-[10px] text-gray-400 mb-2">
+            Client : IP 192.168.88.24 | MAC 00:1A:2B:3C:4D
+          </p>
+
+          <div class="sms-box text-orange-200">
+            "Orange Money: Vous avez recu 1500F de 22177XXXXXX. Transaction ID:
+            99827361. Nouveau solde: 12500F."
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <button
+            class="bg-emerald-600 py-3 rounded-lg text-xs font-bold uppercase hover:bg-emerald-500 transition-all"
+          >
+            Valider Ticket
+          </button>
+          <button
+            class="bg-gray-800 py-3 rounded-lg text-xs font-bold uppercase hover:bg-red-900 transition-all"
+          >
+            Rejeter
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="glass p-4 rounded-xl border-t-2 border-blue-500">
+        <h3 class="text-sm font-bold mb-4 flex items-center gap-2">
+          📂 Importation Mikhmon au VPS
+        </h3>
+
+        <div class="mb-4">
+          <label class="text-[10px] text-gray-400 block mb-1 uppercase"
+            >Catégorie de prix</label
+          >
+          <select
+            class="w-full bg-slate-900 border border-slate-700 p-3 rounded text-sm outline-none focus:border-blue-500"
+          >
+            <option>Ticket 300F</option>
+            <option>Ticket 500F</option>
+            <option>Ticket 1000F</option>
+            <option selected>Ticket 1500F</option>
+            <option>Ticket 3000F</option>
+          </select>
+        </div>
+
+        <div class="mb-4">
+          <label class="text-[10px] text-gray-400 block mb-1 uppercase"
+            >Coller les codes (Un par ligne)</label
+          >
+          <textarea
+            class="w-full bg-black/40 border border-slate-700 p-3 rounded text-[10px] h-20 outline-none font-monospace"
+            placeholder="EX: 9982-1123..."
+          ></textarea>
+        </div>
+
+        <button
+          class="w-full bg-blue-600 py-3 rounded-lg font-black text-xs uppercase shadow-lg shadow-blue-900/40"
+        >
+          Mettre à jour le stock VPS
+        </button>
+      </div>
+    </section>
+
+    <section class="mt-10 mb-10">
+      <h2 class="text-lg font-semibold mb-3">
+        Consommation en Direct (MikroTik Sync)
+      </h2>
+      <div class="space-y-4">
+        <div class="glass rounded-2xl p-5">
+          <div class="flex justify-between mb-2">
+            <span class="text-sm font-medium"
+              >Ticket: <span class="text-cyan-400">TK-9921</span></span
+            >
+            <span class="text-xs px-2 py-1 bg-blue-900/30 text-blue-300 rounded"
+              >Actif</span
+            >
+          </div>
+          <div class="grid grid-cols-2 gap-2 text-xs mb-4">
+            <p>⏳ Restant: <b>14h 22m</b></p>
+            <p>📊 Données: <b>1.2 GB / 2 GB</b></p>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 60%"></div>
+          </div>
+          <p class="text-[10px] text-gray-500 mt-2 text-right italic">
+            Sync MikroTik: OK (2ms)
+          </p>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

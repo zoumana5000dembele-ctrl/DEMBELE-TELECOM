@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Monitoring Client Wi-Fi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-900 min-h-screen flex items-center justify-center p-4">
+    <div
+      class="w-full max-w-sm bg-gray-900 rounded-3xl p-6 border-2 border-yellow-500 shadow-2xl"
+    >
+      <!-- Header -->
+      <div class="flex justify-between items-center mb-5">
+        <div class="flex items-center gap-2">
+          <span
+            class="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse"
+            style="box-shadow: 0 0 10px #25d366"
+          ></span>
+          <span
+            class="text-green-500 text-xs font-bold uppercase"
+            style="letter-spacing: 1px"
+          >
+            Session Active
+          </span>
+        </div>
+        <span class="text-gray-500 text-xs">ID: #79531543</span>
+      </div>
+
+      <!-- Code Wi-Fi -->
+      <div
+        class="text-center mb-6 p-4 rounded-2xl"
+        style="background: rgba(255, 193, 7, 0.05)"
+      >
+        <p
+          class="text-yellow-500 text-xs uppercase mb-1"
+          style="letter-spacing: 1px"
+        >
+          Votre Code Wi-Fi
+        </p>
+        <div
+          class="text-3xl font-black text-white mt-1"
+          style="font-family: 'Courier New', monospace"
+        >
+          {{ticket_number}}
+        </div>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="grid grid-cols-2 gap-4 mb-5">
+        <div
+          class="bg-gray-800 p-4 rounded-2xl text-center border border-gray-700"
+        >
+          <span class="block text-xs text-yellow-500 uppercase mb-1.5">
+            Temps Restant
+          </span>
+          <span class="text-xl font-extrabold text-white" id="live-time">
+            07h 45m
+          </span>
+        </div>
+        <div
+          class="bg-gray-800 p-4 rounded-2xl text-center border border-gray-700"
+        >
+          <span class="block text-xs text-yellow-500 uppercase mb-1.5">
+            Data Restante
+          </span>
+          <span class="text-xl font-extrabold text-white" id="live-data">
+            850 MB
+          </span>
+        </div>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="mb-3">
+        <div class="flex justify-between text-xs text-gray-500 mb-2">
+          <span>Utilisation du Forfait</span>
+          <span class="text-yellow-500 font-bold">65%</span>
+        </div>
+        <div class="w-full h-3 bg-black rounded-full p-0.5">
+          <div
+            class="h-full rounded-full"
+            style="
+              width: 65%;
+              background: linear-gradient(90deg, #ffc107, #ff9800);
+              box-shadow: 0 0 10px rgba(255, 193, 7, 0.4);
+            "
+          ></div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="mt-6 pt-4 border-t border-gray-700 text-center">
+        <p class="text-gray-600 text-xs italic">
+          Pour recharger, contactez le 79 53 15 43
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

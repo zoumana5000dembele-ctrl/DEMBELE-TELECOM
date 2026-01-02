@@ -1,6 +1,9 @@
 
+from dotenv import load_dotenv
 from flask import Flask, request, jsonify, render_template
 import re
+
+from src.usecases.list_tickets_categories import ListTicketsCategoriesUseCase
 
 app = Flask(__name__)
 
@@ -17,7 +20,8 @@ def handle_payment():
 
         montant = price_match.group(1) if price_match else None
         telephone = telephone_match.group(1) if telephone_match else None
-        transaction_id = transaction_id_match.group(1)
+        transaction_id = transaction_id_match.group(
+            1) if transaction_id_match else None
 
         message = (
             f"💰 **NOUVEAU PAIEMENT REÇU**\n\n"
@@ -37,8 +41,20 @@ def handle_payment():
 
 @app.get("/")
 def index():
-    return render_template("index.html")
+    categories = ListTicketsCategoriesUseCase().execute()
+    return render_template("index.html", categories=categories)
+
+
+@app.get("/crud-tickets")
+def crud_tickets():
+    return render_template("crud-tickets.html")
+
+
+@app.get("/consulter-temps-restants/<ticket_number>")
+def consulter_temps_restants(ticket_number: str):
+    return render_template("consulter-temps-restant.html", ticket_number=ticket_number)
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)
+    load_dotenv(".env")
+    app.run(host='0.0.0.0', port=5000, debug=True)
