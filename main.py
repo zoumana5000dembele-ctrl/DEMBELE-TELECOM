@@ -1,11 +1,15 @@
 
+from typing import Any, Dict
 from dotenv import load_dotenv
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, Response
 import re
 
 from src.usecases.list_tickets_categories import ListTicketsCategoriesUseCase
+from src.usecases.add_tickets import AddTicketsCommand, AddTicketsUseCase
 
 app = Flask(__name__)
+
+TICKET_ACCESS_KEYS_SEPARATOR = ","
 
 
 @app.post('/payment')
@@ -39,15 +43,43 @@ def handle_payment():
         return jsonify({"status": "error", "message": str(e)}), 500
 
 
-@app.get("/")
-def index():
+@app.get("/checkout")
+def checkout():
     categories = ListTicketsCategoriesUseCase().execute()
-    return render_template("index.html", categories=categories)
+    return render_template("checkout.html", categories=categories)
 
 
-@app.get("/crud-tickets")
-def crud_tickets():
-    return render_template("crud-tickets.html")
+@app.get("/dashboard")
+def dashboard():
+    categories = ListTicketsCategoriesUseCase().execute()
+    return render_template("dashboard.html", categories=categories)
+
+
+@app.post("/api/add-tickets")
+def add_tickets():
+    data: Dict[str, Any] = request.json
+
+    if not data:
+        return Response("Body missing", status=500)
+
+    ticket_access_keys: str | None = data.get("ticket_access_keys", None)
+    category_id: str | None = data.get("ticket_category_id", None)
+    if not ticket_access_keys or not category_id:
+        return Response("Missing params", status=400)
+
+    add_tickets_use_case = AddTicketsUseCase()
+    command = AddTicketsCommand(
+        access_keys=[
+            access_key.strip()
+            for access_key in ticket_access_keys.split(TICKET_ACCESS_KEYS_SEPARATOR)
+            if access_key.strip()
+        ],
+        category_id=category_id
+    )
+
+    tickets = add_tickets_use_case.execute(command)
+
+    return jsonify({"status": "ok", "tickets": len(tickets)}), 200
 
 
 @app.get("/consulter-temps-restants/<ticket_number>")

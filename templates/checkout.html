@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="/static/styles/checkout.css" />
+    <title>DEMBÉLÉ TELECOM - WiFi Premium</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="logo-wrap">
+        <div class="logo-ripple"></div>
+        <img src="/static/logo.png" alt="Logo" class="logo-img" />
+      </div>
+
+      <!-- <div id="manual-section" class="manual-login">
+        <div
+          style="
+            font-size: 0.7rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-weight: bold;
+          "
+        >
+          TICKET PHYSIQUE
+        </div>
+        <input type="text" id="manual_code" placeholder="Code ticket" />
+        <button
+          style="
+            margin-top: 10px;
+            background: var(--primary);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+          "
+          onclick="alert('Vérification...')"
+        >
+          VALIDER LE TICKET
+        </button>
+      </div> -->
+
+      <div id="divider-line" class="divider">
+        <span>OU ACHETER EN LIGNE</span>
+      </div>
+
+      <div id="plans-list">
+        {% for category in categories %}
+        <div class="plan-card" onclick="openPay('300F')">
+          <span style="font-weight: 600"
+            >⏱️ {{category.activity_time}} {{category.activity_time_unit}}</span
+          >
+          <span class="plan-price">{{category.price}}</span>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div id="payment-area">
+        <b style="color: #ff6600">PAIEMENT ORANGE MONEYss</b>
+        <div id="marketing-box" style="margin-top: 10px">
+          <input type="text" id="client_name" placeholder="Votre Nom complet" />
+          <input type="tel" id="client_phone" placeholder="Votre n° Whatsapp" />
+        </div>
+        <p style="font-size: 0.9rem; margin: 15px 0">
+          Envoyez <b id="target-price">...</b> au <b>79 53 15 43</b>
+        </p>
+        <textarea
+          id="sms_box"
+          placeholder="Collez le SMS de confirmation ici..."
+        ></textarea>
+        <button
+          class="call-button"
+          style="position: static; font-size: 1rem"
+          onclick="activerService()"
+        >
+          ACTIVER MON ACCÈS
+        </button>
+        <button
+          onclick="closePay()"
+          style="
+            width: 100%;
+            background: none;
+            border: none;
+            color: #999;
+            margin-top: 15px;
+            cursor: pointer;
+          "
+        >
+          ⬅ RETOUR
+        </button>
+      </div>
+
+      <div id="waiting-area">
+        <div style="text-align: center">
+          <div class="spinner"></div>
+          <b style="color: var(--secondary); font-size: 1.2rem"
+            >DEMANDE EN COURS...</b
+          >
+          <p style="font-size: 0.9rem; color: #333; margin-top: 15px">
+            Votre demande est bien reçue. L'administrateur va valider votre
+            accès d'ici peu.
+          </p>
+
+          <div class="urgent-box">
+            <b style="color: var(--urgent-red); font-size: 0.85rem"
+              >⚡ BESOIN D'UNE ACTIVATION RAPIDE ?</b
+            >
+            <p style="font-size: 0.75rem; color: #555; margin-top: 5px">
+              Si c'est urgent ou s'il est tard, cliquez ci-dessous pour me
+              signaler votre demande.
+            </p>
+            <a href="tel:79531543" class="btn-urgent"
+              >📞 APPELER POUR SIGNALER</a
+            >
+          </div>
+
+          <div
+            style="
+              background: #e6f7ff;
+              border: 1px solid #91d5ff;
+              padding: 12px;
+              border-radius: 12px;
+              margin-top: 15px;
+            "
+          >
+            <p style="font-size: 0.8rem; color: #0050b3; margin: 0">
+              <b>Note :</b> Vous pouvez fermer cette page et vaquer à vos
+              occupations. Le Wi-Fi s'activera tout seul !
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <a href="tel:79531543" class="call-anchor">
+      <div class="call-button">📞 BESOIN D'AIDE ? APPELEZ-MOI</div>
+    </a>
+
+    <script>
+      function openPay(price, isMkt) {
+        document.getElementById("plans-list").style.display = "none";
+        document.getElementById("divider-line").style.display = "none";
+        document.getElementById("target-price").innerText = price;
+        // document.getElementById("marketing-box").style.display = isMkt
+        //   ? "block"
+        //   : "none";
+        document.getElementById("payment-area").style.display = "block";
+      }
+
+      function closePay() {
+        document.getElementById("payment-area").style.display = "none";
+        document.getElementById("plans-list").style.display = "block";
+        document.getElementById("manual-section").style.display = "block";
+        document.getElementById("divider-line").style.display = "block";
+      }
+
+      function activerService() {
+        const sms = document.getElementById("sms_box").value;
+        if (!sms) return alert("Veuillez coller le SMS de confirmation.");
+
+        document.getElementById("payment-area").style.display = "none";
+        document.getElementById("waiting-area").style.display = "block";
+        // Envoi vers VPS ici...
+      }
+    </script>
+  </body>
+</html>
