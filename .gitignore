@@ -2,9 +2,15 @@ venv/
 
 .vscode/
 
+.env.*
 .env
+!.env.example
 
 database.db
 
 __pycache__/
 
+deploy.sh
+ssh_key.pem
+
+.dist

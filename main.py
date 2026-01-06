@@ -4,10 +4,14 @@ from dotenv import load_dotenv
 from flask import Flask, request, jsonify, render_template, Response
 import re
 
+from asgiref.wsgi import WsgiToAsgi
+
 from src.usecases.list_tickets_categories import ListTicketsCategoriesUseCase
 from src.usecases.add_tickets import AddTicketsCommand, AddTicketsUseCase
 
+
 app = Flask(__name__)
+asgi_app = WsgiToAsgi(app)
 
 TICKET_ACCESS_KEYS_SEPARATOR = ","
 

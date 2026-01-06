@@ -1,0 +1,9 @@
+services:
+  app:
+    build: .
+    container_name: zou_portail_captif
+    restart: unless-stopped
+    ports:
+      - "8001:8000"
+    env_file:
+      - .env.production
