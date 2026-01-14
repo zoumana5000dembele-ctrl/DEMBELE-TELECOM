@@ -25,4 +25,7 @@ COPY main.py /app/main.py
 EXPOSE 8000
 
 # Lancement en prod avec uvicorn
-CMD ["uvicorn", "main:asgi_app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]
+# CMD ["uvicorn", "main:asgi_app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]
+# CMD ["gunicorn", "main:app", "--bind", "0.0.0.0"]
+
+CMD [ "python", "main.py" ]

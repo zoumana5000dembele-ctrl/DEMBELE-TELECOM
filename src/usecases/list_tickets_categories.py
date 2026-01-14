@@ -1,18 +1,24 @@
 
 from typing import List
-from sqlmodel import select
+# from sqlmodel import select
+from sqlalchemy import select
 from sqlalchemy.orm import joinedload
-from src.db.db_config import session
-from src.db.models import CategoryTicketModel
+from src.db.db_config import Session
+from src.db.alchemy_models import CategoryTicketModel
 from src.http.dto import ListCategoryTicketDTO
 
 
 class ListTicketsCategoriesUseCase:
 
+    def __init__(self) -> None:
+        self.__session = Session()
+
     def execute(self) -> List[ListCategoryTicketDTO]:
         stmt = select(CategoryTicketModel).options(
-            joinedload(CategoryTicketModel.tickets))  # type: ignore
-        category_models = session.exec(stmt).unique().all()
+            joinedload(CategoryTicketModel.tickets))
+
+        result = self.__session.execute(stmt)
+        category_models = result.scalars().unique().all()
 
         categories = [
             ListCategoryTicketDTO(

@@ -1,17 +1,18 @@
 
+import os
 from typing import Any, Dict
 from dotenv import load_dotenv
 from flask import Flask, request, jsonify, render_template, Response
 import re
 
-from asgiref.wsgi import WsgiToAsgi
+# from asgiref.wsgi import WsgiToAsgi
 
 from src.usecases.list_tickets_categories import ListTicketsCategoriesUseCase
 from src.usecases.add_tickets import AddTicketsCommand, AddTicketsUseCase
 
 
 app = Flask(__name__)
-asgi_app = WsgiToAsgi(app)
+# asgi_app = WsgiToAsgi(app)
 
 TICKET_ACCESS_KEYS_SEPARATOR = ","
 
@@ -91,6 +92,9 @@ def consulter_temps_restants(ticket_number: str):
     return render_template("consulter-temps-restant.html", ticket_number=ticket_number)
 
 
+PORT = int(os.getenv("PORT", "8000"))
+DEBUG = bool(int(os.getenv("DEBUG", "1")))
+
 if __name__ == "__main__":
     load_dotenv(".env")
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=PORT, debug=DEBUG)
