@@ -125,15 +125,24 @@
         padding: 15px;
         margin-bottom: 12px;
         display: flex;
+        flex-direction: column;
         justify-content: space-between;
         align-items: center;
         cursor: pointer;
         transition: 0.3s;
         border: 1px solid transparent;
       }
-      .plan-card:hover {
+      .plan-card:hover:not(.plan-card-disabled) {
         transform: scale(1.03);
         border-color: var(--primary);
+      }
+      .plan-card-disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        background: #1a1a1a;
+      }
+      .plan-card-disabled:hover {
+        transform: none;
       }
       .plan-price {
         color: var(--primary);

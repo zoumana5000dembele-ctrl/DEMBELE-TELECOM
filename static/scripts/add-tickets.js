@@ -17,7 +17,7 @@ async function addTickets() {
       if (response.ok) {
         const result = await response.json();
         alert("Tickets added successfully! \nVeuillez rafraichir la page.");
-        console.log(result);
+               console.log(result);
       } else {
         alert("Failed to add tickets.");
         console.error("Error:", response.statusText);
