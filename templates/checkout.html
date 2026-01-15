@@ -48,34 +48,70 @@
 
       <div id="plans-list">
         {% for category in categories %}
-        <div class="plan-card" onclick="openPay('300F')">
-          <span style="font-weight: 600"
-            >⏱️ {{category.activity_time}} {{category.activity_time_unit}}</span
+        <div
+          class="plan-card {% if category.stock_restant == 0 %}plan-card-disabled{% endif %}"
+          {%
+          if
+          category.stock_restant
+        >
+          0 %}onclick="openPay('{{category.price}}', '{{category.id}}')"{% endif
+          %} data-category-id="{{category.id}}" >
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              width: 100%;
+            "
           >
-          <span class="plan-price">{{category.price}}</span>
+            <span style="font-weight: 600"
+              >⏱️ {{category.activity_time}}
+              {{category.activity_time_unit}}</span
+            >
+            <span class="plan-price">{{category.price}}</span>
+          </div>
+          <span
+            class="stock-info"
+            style="font-size: 0.7rem; color: {% if category.stock_restant > 0 %}#4CAF50{% else %}#f44336{% endif %}; margin-top: 5px; display: block;"
+          >
+            {% if category.stock_restant > 0 %} {{category.stock_restant}}
+            ticket{% if category.stock_restant > 1 %}s{% endif %} disponible{%
+            if category.stock_restant > 1 %}s{% endif %} {% else %} Épuisé {%
+            endif %}
+          </span>
         </div>
         {% endfor %}
       </div>
 
-      <div id="payment-area">
-        <b style="color: #ff6600">PAIEMENT ORANGE MONEYss</b>
+      <div id="payment-area" style="display: none">
+        <b style="color: #ff6600">PAIEMENT ORANGE MONEY</b>
         <div id="marketing-box" style="margin-top: 10px">
-          <input type="text" id="client_name" placeholder="Votre Nom complet" />
-          <input type="tel" id="client_phone" placeholder="Votre n° Whatsapp" />
+          <input
+            type="text"
+            id="client_name"
+            placeholder="Votre Nom complet"
+            required
+          />
+          <input
+            type="tel"
+            id="client_phone"
+            placeholder="Votre n° Whatsapp"
+            required
+          />
         </div>
         <p style="font-size: 0.9rem; margin: 15px 0">
           Envoyez <b id="target-price">...</b> au <b>79 53 15 43</b>
         </p>
         <textarea
           id="sms_box"
-          placeholder="Collez le SMS de confirmation ici..."
+          placeholder="Collez le SMS de confirmation Orange Money ici..."
         ></textarea>
         <button
           class="call-button"
           style="position: static; font-size: 1rem"
           onclick="activerService()"
         >
-          ACTIVER MON ACCÈS
+          ENVOYER MA DEMANDE
         </button>
         <button
           onclick="closePay()"
@@ -92,7 +128,7 @@
         </button>
       </div>
 
-      <div id="waiting-area">
+      <div id="waiting-area" style="display: none">
         <div style="text-align: center">
           <div class="spinner"></div>
           <b style="color: var(--secondary); font-size: 1.2rem"
@@ -127,7 +163,7 @@
           >
             <p style="font-size: 0.8rem; color: #0050b3; margin: 0">
               <b>Note :</b> Vous pouvez fermer cette page et vaquer à vos
-              occupations. Le Wi-Fi s'activera tout seul !
+              occupations. Vous recevrez votre code ticket une fois validé.
             </p>
           </div>
         </div>
@@ -139,30 +175,131 @@
     </a>
 
     <script>
-      function openPay(price, isMkt) {
+      let selectedCategoryId = null;
+
+      // Charger les données du localStorage
+      function loadStoredData() {
+        const storedName = localStorage.getItem("client_name");
+        const storedPhone = localStorage.getItem("client_phone");
+
+        if (storedName) {
+          document.getElementById("client_name").value = storedName;
+        }
+        if (storedPhone) {
+          document.getElementById("client_phone").value = storedPhone;
+        }
+      }
+
+      // Sauvegarder les données dans le localStorage
+      function saveStoredData() {
+        const clientName = document.getElementById("client_name").value.trim();
+        const clientPhone = document
+          .getElementById("client_phone")
+          .value.trim();
+
+        if (clientName) {
+          localStorage.setItem("client_name", clientName);
+        }
+        if (clientPhone) {
+          localStorage.setItem("client_phone", clientPhone);
+        }
+      }
+
+      // Charger les données au chargement de la page
+      document.addEventListener("DOMContentLoaded", loadStoredData);
+
+      function openPay(price, categoryId) {
+        selectedCategoryId = categoryId;
+        console.log("Selected Category ID:", selectedCategoryId);
         document.getElementById("plans-list").style.display = "none";
+        if (Number(selectedCategoryId) <= 3) {
+          document.getElementById("marketing-box").style.display = "none";
+        }
         document.getElementById("divider-line").style.display = "none";
         document.getElementById("target-price").innerText = price;
-        // document.getElementById("marketing-box").style.display = isMkt
-        //   ? "block"
-        //   : "none";
         document.getElementById("payment-area").style.display = "block";
       }
 
       function closePay() {
         document.getElementById("payment-area").style.display = "none";
         document.getElementById("plans-list").style.display = "block";
-        document.getElementById("manual-section").style.display = "block";
         document.getElementById("divider-line").style.display = "block";
+        selectedCategoryId = null;
       }
 
-      function activerService() {
-        const sms = document.getElementById("sms_box").value;
-        if (!sms) return alert("Veuillez coller le SMS de confirmation.");
+      // Sauvegarder les données lors de la saisie
+      document
+        .getElementById("client_name")
+        ?.addEventListener("input", saveStoredData);
+      document
+        .getElementById("client_phone")
+        ?.addEventListener("input", saveStoredData);
+
+      async function activerService() {
+        const clientName = document.getElementById("client_name").value.trim();
+        const clientPhone = document
+          .getElementById("client_phone")
+          .value.trim();
+        const sms = document.getElementById("sms_box").value.trim();
+
+        if (!clientName) {
+          alert("Veuillez entrer votre nom complet.");
+          return;
+        }
+
+        if (!clientPhone) {
+          alert("Veuillez entrer votre numéro de téléphone.");
+          return;
+        }
+
+        if (!sms) {
+          alert("Veuillez coller le SMS de confirmation Orange Money.");
+          return;
+        }
+
+        if (!selectedCategoryId) {
+          alert("Erreur: Catégorie non sélectionnée.");
+          return;
+        }
+
+        // Sauvegarder les données avant l'envoi
+        saveStoredData();
 
         document.getElementById("payment-area").style.display = "none";
         document.getElementById("waiting-area").style.display = "block";
-        // Envoi vers VPS ici...
+
+        try {
+          const response = await fetch("/api/create-ticket-request", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              category_id: selectedCategoryId,
+              client_name: clientName,
+              client_phone: clientPhone,
+              sms_content: sms,
+            }),
+          });
+
+          const data = await response.json();
+
+          if (data.status === "ok") {
+            // Rediriger vers la page de statut
+            setTimeout(() => {
+              window.location.href = `/request/${data.request_id}`;
+            }, 2000);
+          } else {
+            alert("Erreur: " + (data.message || "Une erreur est survenue"));
+            document.getElementById("waiting-area").style.display = "none";
+            document.getElementById("payment-area").style.display = "block";
+          }
+        } catch (error) {
+          console.error("Erreur:", error);
+          alert("Une erreur est survenue. Veuillez réessayer.");
+          document.getElementById("waiting-area").style.display = "none";
+          document.getElementById("payment-area").style.display = "block";
+        }
       }
     </script>
   </body>

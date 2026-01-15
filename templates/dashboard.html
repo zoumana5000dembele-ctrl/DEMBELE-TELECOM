@@ -6,6 +6,7 @@
     <title>DEMBELE TELECOM - Contrôle Administrateur</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="/static/scripts/add-tickets.js"></script>
+    <script defer src="/static/scripts/dashboard-requests.js"></script>
     <link rel="stylesheet" href="/static/styles/dashboard.css" />
   </head>
   <body class="p-4">
@@ -39,40 +40,10 @@
         Demandes Wi-Fi (Vérification SMS)
       </h2>
 
-      <div class="glass rounded-xl p-4 neon-border-blue mb-4">
-        <div class="flex justify-between items-center mb-3">
-          <span class="status-pill bg-orange-500/20 text-orange-400 uppercase"
-            >En attente</span
-          >
-          <span class="text-[10px] text-gray-500">Aujourd'hui, 19:12</span>
-        </div>
-
-        <div class="mb-3">
-          <p class="text-xs font-bold text-white mb-1">
-            Plan choisi :
-            <span class="text-purple-400 font-black">1500F (7 Jours)</span>
-          </p>
-          <p class="text-[10px] text-gray-400 mb-2">
-            Client : IP 192.168.88.24 | MAC 00:1A:2B:3C:4D
-          </p>
-
-          <div class="sms-box text-orange-200">
-            "Orange Money: Vous avez recu 1500F de 22177XXXXXX. Transaction ID:
-            99827361. Nouveau solde: 12500F."
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-3">
-          <button
-            class="bg-emerald-600 py-3 rounded-lg text-xs font-bold uppercase hover:bg-emerald-500 transition-all"
-          >
-            Valider Ticket
-          </button>
-          <button
-            class="bg-gray-800 py-3 rounded-lg text-xs font-bold uppercase hover:bg-red-900 transition-all"
-          >
-            Rejeter
-          </button>
+      <div id="requests-container">
+        <div class="text-center text-gray-500 py-8">
+          <div class="spinner mx-auto"></div>
+          <p class="mt-4">Chargement des demandes...</p>
         </div>
       </div>
     </section>

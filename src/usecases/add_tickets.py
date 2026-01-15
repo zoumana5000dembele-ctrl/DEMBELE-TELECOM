@@ -2,7 +2,7 @@
 from dataclasses import dataclass
 from typing import List
 
-from src.db.alchemy_models import TicketModel
+from src.db.models import TicketModel
 from src.db.db_config import Session
 from src.entities.ticket import Ticket
 

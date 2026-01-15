@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Statut de votre demande - DEMBÉLÉ TELECOM</title>
+    <link rel="stylesheet" href="/static/styles/checkout.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="logo-wrap">
+        <div class="logo-ripple"></div>
+        <img src="/static/logo.png" alt="Logo" class="logo-img" />
+      </div>
+
+      <div id="status-area">
+        <div id="pending-status" style="display: none; text-align: center">
+          <div class="spinner"></div>
+          <b
+            style="
+              color: var(--secondary);
+              font-size: 1.2rem;
+              display: block;
+              margin-top: 20px;
+            "
+          >
+            DEMANDE EN ATTENTE DE VALIDATION
+          </b>
+          <p style="font-size: 0.9rem; color: #333; margin-top: 15px">
+            Votre demande est bien reçue. L'administrateur va valider votre
+            accès d'ici peu.
+          </p>
+
+          <div class="urgent-box" style="margin-top: 20px">
+            <b style="color: var(--urgent-red); font-size: 0.85rem"
+              >⚡ BESOIN D'UNE VALIDATION RAPIDE ?</b
+            >
+            <p style="font-size: 0.75rem; color: #555; margin-top: 5px">
+              Si c'est urgent, cliquez ci-dessous pour appeler l'administrateur
+              et signaler votre demande.
+            </p>
+            <a href="tel:79531543" class="btn-urgent"
+              >📞 APPELER L'ADMINISTRATEUR</a
+            >
+          </div>
+
+          <div
+            style="
+              background: #e6f7ff;
+              border: 1px solid #91d5ff;
+              padding: 12px;
+              border-radius: 12px;
+              margin-top: 15px;
+            "
+          >
+            <p style="font-size: 0.8rem; color: #0050b3; margin: 0">
+              <b>Note :</b> Vous pouvez fermer cette page. Vous recevrez votre
+              code ticket une fois validé.
+            </p>
+          </div>
+        </div>
+
+        <div id="validated-status" style="display: none; text-align: center">
+          <div style="font-size: 3rem; margin-bottom: 20px">✅</div>
+          <b
+            style="
+              color: #4caf50;
+              font-size: 1.5rem;
+              display: block;
+              margin-bottom: 20px;
+            "
+          >
+            VOTRE TICKET EST VALIDÉ !
+          </b>
+
+          <div
+            style="
+              background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+              padding: 25px;
+              border-radius: 15px;
+              margin: 20px 0;
+              box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            "
+          >
+            <p
+              style="
+                color: #fff;
+                font-size: 0.9rem;
+                margin-bottom: 10px;
+                opacity: 0.9;
+              "
+            >
+              Votre code ticket :
+            </p>
+            <div
+              id="ticket-code"
+              style="
+                background: rgba(255, 255, 255, 0.2);
+                backdrop-filter: blur(10px);
+                padding: 20px;
+                border-radius: 10px;
+                font-size: 1.8rem;
+                font-weight: bold;
+                color: #fff;
+                letter-spacing: 3px;
+                font-family: 'Courier New', monospace;
+                margin: 15px 0;
+                border: 2px dashed rgba(255, 255, 255, 0.5);
+              "
+            >
+              Chargement...
+            </div>
+            <button
+              id="copy-button"
+              onclick="copyTicketCode()"
+              style="
+                background: rgba(255, 255, 255, 0.3);
+                border: 2px solid rgba(255, 255, 255, 0.5);
+                color: #fff;
+                padding: 12px 30px;
+                border-radius: 25px;
+                font-weight: bold;
+                cursor: pointer;
+                margin-top: 10px;
+                transition: all 0.3s;
+              "
+              onmouseover="this.style.background='rgba(255,255,255,0.5)'"
+              onmouseout="this.style.background='rgba(255,255,255,0.3)'"
+            >
+              📋 Copier le code
+            </button>
+            <button
+              class="w-full mt-5 bg-blue-600 py-3 rounded-lg font-black text-xs uppercase shadow-lg shadow-blue-900/40"
+            >
+              <a
+                href="https://dembeletelecom.com/login?dst=http%3A%2F%2Fwww.msftconnecttest.com%2Fredirect"
+                target="_blank"
+              >
+                🔗 Connecter au réseau
+              </a>
+            </button>
+          </div>
+        </div>
+
+        <div id="refused-status" style="display: none; text-align: center">
+          <div style="font-size: 3rem; margin-bottom: 20px">❌</div>
+          <b
+            style="
+              color: #f44336;
+              font-size: 1.5rem;
+              display: block;
+              margin-bottom: 20px;
+            "
+          >
+            DEMANDE REFUSÉE
+          </b>
+          <p style="font-size: 0.9rem; color: #333; margin-top: 15px">
+            Votre demande a été refusée. Veuillez vérifier vos informations et
+            réessayer.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const requestId = "{{ request_id }}";
+      let ticketCode = null;
+
+      async function checkStatus() {
+        try {
+          const response = await fetch(`/api/ticket-request/${requestId}`);
+          const data = await response.json();
+
+          if (data.status === "ok" && data.request) {
+            const request = data.request;
+            ticketCode = request.ticket_access_key;
+
+            // Masquer tous les statuts
+            document.getElementById("pending-status").style.display = "none";
+            document.getElementById("validated-status").style.display = "none";
+            document.getElementById("refused-status").style.display = "none";
+
+            // Afficher le bon statut
+            if (request.status === "pending") {
+              document.getElementById("pending-status").style.display = "block";
+            } else if (request.status === "validated" && ticketCode) {
+              document.getElementById("validated-status").style.display =
+                "block";
+              document.getElementById("ticket-code").textContent = ticketCode;
+            } else if (request.status === "refused") {
+              document.getElementById("refused-status").style.display = "block";
+            }
+          }
+        } catch (error) {
+          console.error("Erreur lors de la vérification du statut:", error);
+        }
+      }
+
+      function copyTicketCode() {
+        if (ticketCode) {
+          navigator.clipboard.writeText(ticketCode).then(() => {
+            const button = document.getElementById("copy-button");
+            const originalText = button.textContent;
+            button.textContent = "✅ Copié !";
+            button.style.background = "rgba(76, 175, 80, 0.5)";
+            setTimeout(() => {
+              button.textContent = originalText;
+              button.style.background = "rgba(255, 255, 255, 0.3)";
+            }, 2000);
+          });
+        }
+      }
+
+      // Vérifier le statut toutes les 3 secondes
+      checkStatus();
+      setInterval(checkStatus, 3000);
+    </script>
+  </body>
+</html>
